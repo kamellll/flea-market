@@ -1,0 +1,69 @@
+erDiagram
+    products }o--|| users: ""
+    goods }o--|| products: ""
+    comments }o--|| products: ""
+    category_product }o--|| products: ""
+    category_product }o--|| categories: ""
+    users ||--|| profiles: ""
+    products {
+        bigint   id PK
+        bigint    user_id  FK
+        varchar(255)  img_url
+        varchar(255)  product_name
+        varchar(255)  brand_name
+        int   price
+        string  explanation
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    users {
+        bigint       id PK
+        varchar(255) name
+        varchar(255) email
+        varchar(255) password
+        tinyint is_profile_completed
+        timestamp    created_at
+        timestamp    updated_at
+    }
+
+    goods {
+        bigint   id PK
+        bigint   product_id  FK
+        timestamp    created_at
+        timestamp    updated_at
+    }
+
+    comments {
+        bigint   id PK
+        bigint   product_id  FK
+        varchar(255)    comments
+        timestamp    created_at
+        timestamp    updated_at
+    }
+
+    categories {
+        bigint  id  PK
+        string  content
+        timestamp    created_at
+        timestamp    updated_at
+    }
+
+    category_product {
+        bigint  id  PK
+        bigint  product_id  FK
+        bigint  category_id   FK
+        timestamp    created_at
+        timestamp    updated_at
+    }
+
+    profiles {
+        bigint  id  PK
+        bigint  user_id FK
+        varchar(255)    img_url
+        varchar(255)    name
+        varchar(255)    address
+        varchar(255)    building
+        timestamp    created_at
+        timestamp    updated_at
+    }
