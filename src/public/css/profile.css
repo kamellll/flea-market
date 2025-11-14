@@ -1,0 +1,133 @@
+body {
+    background: #fff;
+}
+
+.login-form {
+    margin: 0 auto;
+    padding: 30px 15px;
+    max-width: 1230px;
+}
+
+.login-form__heading {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form {
+    margin: 0 auto;
+    width: 45%;
+    text-align: center;
+    background: #fff;
+    padding: 30px 70px;
+}
+
+.form__group {
+    margin-bottom: 35px;
+}
+
+.form__group-title {
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.form__error {
+    color: #ff0000;
+    text-align: left;
+}
+
+.avatar-upload {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 丸い枠全体 */
+.avatar-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 画像がない時のグレー丸 */
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #ccc;
+}
+
+/* 画像プレビュー */
+#avatar-preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    /* 最初は非表示（ファイル選択後に表示） */
+}
+
+.avatar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* 本物のinputは隠す */
+.avatar-input {
+    display: none;
+}
+
+/* 擬似ボタン */
+.avatar-button {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #4b9ce6;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.avatar-file-name {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.form__input--text input {
+    padding: 10px;
+    width: 100%;
+    height: 40px;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+
+    appearance: none;
+}
+
+.form__button {
+    margin-top: 20px;
+}
+
+.form__button-submit {
+    padding: 10px;
+    height: 46px;
+    width: 100%;
+    border: none;
+    border-radius: 3px;
+    background: #ff5555;
+    color: #fff;
+    cursor: pointer;
+}
+
+.login__link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.to-register {
+    text-align: center;
+}
+
+.to-register a {
+    text-decoration: none;
+}

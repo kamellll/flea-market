@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ItemController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,6 +20,8 @@ Route::get('/', function () {
 });
 Route::post('/register', [AuthController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login', [AuthController::class, 'index']);
 Route::middleware('auth')->group(function () {
+    Route::get('/', [ItemController::class, 'index']);
     Route::get('/mypage/profile', [ProfileController::class, 'index']);
 });
