@@ -59,3 +59,11 @@ body {
     color: #fff;
     cursor: pointer;
 }
+
+.to-register {
+    text-align: center;
+}
+
+.to-register a {
+    text-decoration: none;
+}

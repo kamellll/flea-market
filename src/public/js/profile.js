@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const fileInput = document.getElementById('avatar');
     const previewImage = document.getElementById('avatar-preview-image');
     const placeholder = document.querySelector('#avatar-preview .avatar-placeholder');
-    const fileNameSpan = document.getElementById('avatar-file-name');
 
     if (!fileInput) return;
 
@@ -14,12 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
             previewImage.src = '';
             previewImage.style.display = 'none';
             placeholder.style.display = 'block';
-            //fileNameSpan.textContent = '選択されていません';
             return;
         }
-
-        // ファイル名表示
-        fileNameSpan.textContent = file.name;
 
         // 画像プレビュー
         const reader = new FileReader();
