@@ -5,6 +5,9 @@ erDiagram
     category_product }o--|| products: ""
     category_product }o--|| categories: ""
     users ||--|| profiles: ""
+    purchases ||--|| products: ""
+    purchases }o--|| products: ""
+    goods }o--|| users: ""
     products {
         bigint   id PK
         bigint    user_id  FK
@@ -13,6 +16,7 @@ erDiagram
         varchar(255)  brand_name
         int   price
         string  explanation
+        int    condition
         timestamp created_at
         timestamp updated_at
     }
@@ -30,6 +34,7 @@ erDiagram
     goods {
         bigint   id PK
         bigint   product_id  FK
+        bigint   user_id  FK
         timestamp    created_at
         timestamp    updated_at
     }
@@ -64,6 +69,14 @@ erDiagram
         varchar(255)    postal_code
         varchar(255)    address
         varchar(255)    building
+        timestamp    created_at
+        timestamp    updated_at
+    }
+
+    purchases {
+        bigint  id  PK
+        bigint  product_id  FK
+        bigint  user_id  FK
         timestamp    created_at
         timestamp    updated_at
     }

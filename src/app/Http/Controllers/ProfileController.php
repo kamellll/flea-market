@@ -30,7 +30,7 @@ class ProfileController extends Controller
         ));
         // User::find($request->user()->id)->update($user);
 
-        $profileData = $request->only(['postal_code', 'address', 'building']);
+        $profileData = $request->only(['postal_code', 'address', 'building', '']);
 
         // ③ 画像アップロードがあればパスを profileData に追加
         if ($request->hasFile('avatar')) {
@@ -43,7 +43,7 @@ class ProfileController extends Controller
             $path = $request->file('avatar')->store('avatars', 'public');
 
             // only() で作った配列に後からキーを足す
-            $profileData['avatar_path'] = $path;
+            $profileData['avatar'] = $path;
         }
 
         // ④ updateOrCreate で「新規 or 更新」

@@ -52,4 +52,13 @@ class AuthController extends Controller
         $request->session()->regenerate();
         return redirect('/mypage/profile');
     }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login'); // 好きな画面へ
+    }
 }

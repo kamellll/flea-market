@@ -21,8 +21,9 @@ Route::get('/', function () {
 Route::post('/register', [AuthController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::get('/', [ItemController::class, 'index']);
 Route::middleware('auth')->group(function () {
-    Route::get('/', [ItemController::class, 'index']);
     Route::get('/mypage/profile', [ProfileController::class, 'index']);
     Route::post('/mypage/profile/update', [ProfileController::class, 'store']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

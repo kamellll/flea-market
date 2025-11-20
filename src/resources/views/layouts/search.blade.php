@@ -31,6 +31,11 @@
                         @csrf
                         <button>ログアウト</button>
                     </form>
+                @else
+                    <form class="header__logout" action="{{ route('login') }}" method="post">
+                        @csrf
+                        <button>ログイン</button>
+                    </form>
                 @endif
                 <a href="/mypage" class="header__mypage">マイページ</a>
                 <a href="" class="header__sell">出品</a>
