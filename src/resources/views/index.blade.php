@@ -13,7 +13,7 @@
         <div class="products">
             @foreach($products as $product)
                 <div class="products__item {{ $product->purchase ? 'soldout' : '' }}">
-                    <a href="#" class="product-card">
+                    <a href="/item/{{ $product->id }}" class="product-card">
                         <div class="product-card__image-wrapper">
                             <img src="{{ $product->img_url }}" alt="商品名" class="product-card__image">
                         </div>

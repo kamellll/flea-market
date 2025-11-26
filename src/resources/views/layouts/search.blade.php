@@ -20,7 +20,7 @@
 <body>
     <header class="header">
         <div class="header__inner">
-            <img src="/images/rogo.png" alt="coachtech">
+            <a href="/"><img src="/images/rogo.png" alt="coachtech"></a>
             <form action="/" class="header__search">
                 <input type="text" class="header__search-text" name="product_name" placeholder="なにをお探しですか？">
                 <input type="submit" hidden>
@@ -32,7 +32,7 @@
                         <button>ログアウト</button>
                     </form>
                 @else
-                    <form class="header__logout" action="{{ route('login') }}" method="post">
+                    <form class="header__logout" action="/login" method="get">
                         @csrf
                         <button>ログイン</button>
                     </form>
