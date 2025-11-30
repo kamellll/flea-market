@@ -21,8 +21,10 @@
     <header class="header">
         <div class="header__inner">
             <a href="/"><img src="/images/rogo.png" alt="coachtech"></a>
-            <form action="/" class="header__search">
-                <input type="text" class="header__search-text" name="product_name" placeholder="なにをお探しですか？">
+            <form action="/search" class="header__search" method="post">
+                @csrf
+                <input type="text" class="header__search-text" name="keyword" placeholder="なにをお探しですか？"
+                    value="{{ old('keyword', $keyword ?? '') }}">
                 <input type="submit" hidden>
             </form>
             <div class="header__item">

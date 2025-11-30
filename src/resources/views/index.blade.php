@@ -6,8 +6,13 @@
 
 @section('content')
     <div class="tab">
-        <div class="tab__recommended  {{ request('tab') === 'mylist' ? '' : 'color-red' }}">おすすめ</div>
-        <div class="tab_mylist  {{ request('tab') === 'mylist' ? 'color-red' : '' }}">マイリスト</div>
+        <a href="/">
+            <div class="tab__recommended  {{ request('tab') === 'mylist' ? '' : 'color-red' }}">おすすめ</div>
+        </a>
+        <form action="/" method="GET">
+            <input type="hidden" name="tab" value="mylist">
+            <input type="submit" value="マイリスト" class="tab__mylist {{ request('tab') === 'mylist' ? 'color-red' : '' }}" >
+        </form>
     </div>
     <div>
         <div class="products">

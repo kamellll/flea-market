@@ -25,6 +25,7 @@ Route::get('/', [ItemController::class, 'index']);
 Route::get('/item/{item_id}', [ItemController::class, 'detail']);
 Route::post('/good', [ItemController::class, 'store']);
 Route::post('/comment', [ItemController::class, 'comment']);
+Route::post('/search', [ItemController::class, 'search']);
 Route::middleware('auth')->group(function () {
     Route::get('/mypage/profile', [ProfileController::class, 'index']);
     Route::post('/mypage/profile/update', [ProfileController::class, 'store']);

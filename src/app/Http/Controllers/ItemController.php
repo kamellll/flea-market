@@ -10,10 +10,68 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CommentRequest;
 class ItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('purchase')->get();
-        return view('index', compact('products'));
+        // どのタブか（all / mylist など）
+        $tab = $request->query('tab', 'all');
+
+        // 商品名の検索キーワード
+        $keyword = $request->query('keyword');
+
+        // ベースとなるクエリを作る
+        if ($tab === 'mylist') {
+            if (!Auth::check()) {
+                return back();
+            }
+            // マイリスト：ログインユーザーが goods に登録した商品だけ
+            $userId = Auth::id();
+
+            $query = Product::whereHas('goods', function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            });
+
+            // ★ セッションから keyword を取得
+            $keyword = session('mylist_keyword');
+
+            if (!empty($keyword)) {
+                $query->where('product_name', 'LIKE', '%' . $keyword . '%');
+            }
+        } else {
+            // 通常の商品一覧（必要に応じて書き換え）
+            $query = Product::query();
+            $keyword = session('mylist_keyword');
+
+            if (!empty($keyword)) {
+                $query->where('product_name', 'LIKE', '%' . $keyword . '%');
+            }
+        }
+
+        $products = $query->get();
+
+        return view('index', [
+            'products' => $products,
+            'tab' => $tab,
+            'keyword' => $keyword,
+        ]);
+
+    }
+    public function search(Request $request)
+    {
+        $keyword = $request->input('keyword'); // or $request->query('keyword')
+
+        $query = Product::query();
+
+        // 空文字のときは条件をつけない
+        if (!empty($keyword)) {
+            $query->where('product_name', 'LIKE', '%' . $keyword . '%');
+            session(['mylist_keyword' => $keyword]);
+        } else {
+            session()->forget('mylist_keyword');
+        }
+
+        $products = $query->get();
+
+        return view('index', compact('products', 'keyword'));
     }
     public function detail($product_id)
     {
