@@ -21,7 +21,7 @@
     <header class="header">
         <div class="header__inner">
             <a href="/"><img src="/images/rogo.png" alt="coachtech"></a>
-            <form action="/search" class="header__search" method="post">
+            <form action="/" class="header__search" method="post">
                 @csrf
                 <input type="text" class="header__search-text" name="keyword" placeholder="なにをお探しですか？"
                     value="{{ old('keyword', $keyword ?? '') }}">
@@ -40,7 +40,7 @@
                     </form>
                 @endif
                 <a href="/mypage" class="header__mypage">マイページ</a>
-                <a href="" class="header__sell">出品</a>
+                <a href="/sell" class="header__sell">出品</a>
             </div>
         </div>
     </header>

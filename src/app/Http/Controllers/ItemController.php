@@ -15,35 +15,49 @@ class ItemController extends Controller
         // どのタブか（all / mylist など）
         $tab = $request->query('tab', 'all');
 
-        // 商品名の検索キーワード
-        $keyword = $request->query('keyword');
+        // ★ GET でも POST でも取れる input() を使う
+        $inputKeyword = $request->input('keyword'); // null or '' or 文字列
 
-        // ベースとなるクエリを作る
+        // ---------- ① keyword とセッションの整理 ----------
+
+        if ($request->has('keyword')) {
+            // パラメータ自体は来ている
+
+            if (strlen(trim($inputKeyword)) > 0) {
+                // 文字が入っている → 保存
+                session(['mylist_keyword' => $inputKeyword]);
+            } else {
+                // 空文字（クリアされた）→ セッション削除
+                session()->forget('mylist_keyword');
+            }
+        }
+
+        // 実際に検索に使うキーワード（セッション基準）
+        $keyword = session('mylist_keyword');
+
+        // ---------- ② ベースクエリ作成 ----------
+
         if ($tab === 'mylist') {
             if (!Auth::check()) {
-                return back();
-            }
-            // マイリスト：ログインユーザーが goods に登録した商品だけ
-            $userId = Auth::id();
+                // 未ログイン時は普通の一覧（お好みで変更）
+                $query = Product::query();
+            } else {
+                // マイリスト：ログインユーザーが goods に登録した商品だけ
+                $userId = Auth::id();
 
-            $query = Product::whereHas('goods', function ($q) use ($userId) {
-                $q->where('user_id', $userId);
-            });
-
-            // ★ セッションから keyword を取得
-            $keyword = session('mylist_keyword');
-
-            if (!empty($keyword)) {
-                $query->where('product_name', 'LIKE', '%' . $keyword . '%');
+                $query = Product::whereHas('goods', function ($q) use ($userId) {
+                    $q->where('user_id', $userId);
+                });
             }
         } else {
-            // 通常の商品一覧（必要に応じて書き換え）
+            // 通常タブ
             $query = Product::query();
-            $keyword = session('mylist_keyword');
+        }
 
-            if (!empty($keyword)) {
-                $query->where('product_name', 'LIKE', '%' . $keyword . '%');
-            }
+        // ---------- ③ keyword があれば商品名であいまい検索 ----------
+
+        if (!empty($keyword)) {
+            $query->where('product_name', 'LIKE', '%' . $keyword . '%');
         }
 
         $products = $query->get();
@@ -53,8 +67,8 @@ class ItemController extends Controller
             'tab' => $tab,
             'keyword' => $keyword,
         ]);
-
     }
+
     public function search(Request $request)
     {
         $keyword = $request->input('keyword'); // or $request->query('keyword')
