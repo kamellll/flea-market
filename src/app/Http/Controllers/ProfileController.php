@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Product;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 class ProfileController extends Controller
@@ -53,5 +55,23 @@ class ProfileController extends Controller
         );
 
         return redirect($to);
+    }
+    public function mypage(Request $request)
+    {
+        $tab = $request->query('page', 'all');
+        $user = Auth::user();
+        $userId = Auth::id();
+        $profile = Profile::query()->where('user_id', $userId)->get();
+        $query = Product::query();
+        if ($tab === 'buy') {
+            $query->where('user_id', $userId);
+        } else {
+            // 通常タブ
+            $query = Product::query();
+        }
+
+        $products = $query->get();
+
+        return view('mypage', compact('user', 'profile', 'products'));
     }
 }

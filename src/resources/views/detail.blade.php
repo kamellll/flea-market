@@ -7,7 +7,17 @@
 @section('content')
     <div class="detail">
         <div class="detail__img">
-            <img src="{{ $product->img_url }}" alt="">
+            @php
+                $src = $product->img_url;
+
+                if (!empty($src) && !preg_match('#^https?://#', $src)) {
+                    // http/https で始まっていない場合は storage のパスとして扱う
+                    $src = asset('storage/' . ltrim($src, '/'));
+                }
+            @endphp
+            @if(!empty($src))
+                <img src="{{ $src }}" alt="商品名" class="product-card__image">
+            @endif
         </div>
         <div class="detail__content">
             <h1 class="product-name">{{ $product->product_name }}</h1>

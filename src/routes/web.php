@@ -32,4 +32,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/mypage/profile/update', [ProfileController::class, 'store']);
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/sell', [SellController::class, 'index']);
+    Route::post('/exhibiting', [SellController::class, 'store']);
 });

@@ -2,6 +2,10 @@ body {
     background: #fff;
 }
 
+h2 {
+    margin: 5px 0px;
+}
+
 .sell {
     margin: 0 auto;
     padding: 30px 15px;
@@ -170,4 +174,73 @@ body {
     border-color: #ff5655;
     background: #ff5655;
     color: #fff;
+}
+
+.form__condition {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+/* ネイティブの矢印を消す＋右側に余白 */
+.form__condition select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 2.5em;
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 2.5em 8px 10px;
+    background-color: #fff;
+
+    /* ▼ 黒塗りつぶし三角形（SVG）を右端に表示 */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%23333' d='M0 0l5 6 5-6z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 6px;
+}
+
+/* IE/Edgeの▼を消す（必要なら） */
+.form__condition select::-ms-expand {
+    display: none;
+}
+
+.explanation {
+    width: 100%;
+    height: 80px;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+}
+
+/* ラッパー */
+.price-input {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+/* ￥マーク（見た目だけ） */
+.price-input::before {
+    content: "￥";
+    position: absolute;
+    left: 10px;
+    /* 位置はお好みで */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
+    pointer-events: none;
+    /* クリックを邪魔しない */
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* 実際の入力欄 */
+.price-input input {
+    padding-left: 28px;
+    /* ￥がかぶらないように左に余白を取る */
+    height: 36px;
+    /* お好みで */
+    box-sizing: border-box;
 }
