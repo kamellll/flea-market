@@ -33,4 +33,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/sell', [SellController::class, 'index']);
     Route::post('/exhibiting', [SellController::class, 'store']);
+    Route::get('/mypage', [ProfileController::class, 'mypage']);
 });

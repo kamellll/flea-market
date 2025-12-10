@@ -5,13 +5,32 @@
 @endsection
 
 @section('content')
+    <div class="profile">
+        <div class="profile__content">
+            <div class="profile__avatar">
+                @if(!empty($profile) && !empty($profile->avatar))
+                    {{-- 画像あり：画像を丸く表示 --}}
+                    <img src="storage/{{ $profile->avatar }}" alt="プロフィール画像">
+                @else
+                    {{-- 画像なし：グレーの円 --}}
+                    <div></div>
+                @endif
+            </div>
+            <div class="profile__name">
+                {{ $user->name }}
+            </div>
+        </div>
+        <div class="profile__edit">
+            <a href="/mypage/profile">プロフィールを編集</a>
+        </div>
+    </div>
     <div class="tab">
-        <a href="/">
-            <div class="tab__recommended  {{ request('tab') === 'mylist' ? '' : 'color-red' }}">おすすめ</div>
+        <a href="/mypage?page=sell">
+            <div class="tab__recommended  {{ request('page') === 'buy' ? '' : 'color-red' }}">出品した商品</div>
         </a>
-        <form action="/" method="GET">
-            <input type="hidden" name="tab" value="mylist">
-            <input type="submit" value="マイリスト" class="tab__mylist {{ request('tab') === 'mylist' ? 'color-red' : '' }}">
+        <form action="/mypage" method="GET">
+            <input type="hidden" name="page" value="buy">
+            <input type="submit" value="購入した商品" class="tab__mylist {{ request('page') === 'buy' ? 'color-red' : '' }}">
         </form>
     </div>
     <div>
@@ -21,12 +40,12 @@
                     <a href="/item/{{ $product->id }}" class="product-card">
                         <div class="product-card__image-wrapper">
                             @php
-                                $src = $product->img_url;
+    $src = $product->img_url;
 
-                                if (!empty($src) && !preg_match('#^https?://#', $src)) {
-                                    // http/https で始まっていない場合は storage のパスとして扱う
-                                    $src = asset('storage/' . ltrim($src, '/'));
-                                }
+    if (!empty($src) && !preg_match('#^https?://#', $src)) {
+        // http/https で始まっていない場合は storage のパスとして扱う
+        $src = asset('storage/' . ltrim($src, '/'));
+    }
                             @endphp
                             @if(!empty($src))
                                 <img src="{{ $src }}" alt="商品名" class="product-card__image">

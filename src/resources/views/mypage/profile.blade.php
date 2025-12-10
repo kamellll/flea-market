@@ -16,9 +16,18 @@
             <div class="form__group">
                 <div class="avatar-upload">
                     <div class="avatar-preview" id="avatar-preview">
-                        <div class="avatar-placeholder"></div>
-                        <img id="avatar-preview-image" src="" alt="プロフィール画像">
+                        @if(!empty($profile) && !empty($profile->avatar))
+                            {{-- 画像あり：プレースホルダーは隠す、画像は表示 --}}
+                            <div class="avatar-placeholder" style="display:none;"></div>
+                            <img id="avatar-preview-image" src="{{ asset('storage/' . $profile->avatar) }}" alt="プロフィール画像"
+                                style="display:block;">
+                        @else
+                            {{-- 画像なし：プレースホルダー表示、画像は非表示 --}}
+                            <div class="avatar-placeholder" style="display:block;"></div>
+                            <img id="avatar-preview-image" src="" alt="プロフィール画像" style="display:none;">
+                        @endif
                     </div>
+
                     <div class="avatar-actions">
                         <input type="file" id="avatar" name="avatar" class="avatar-input" accept="image/*">
                         <label for="avatar" class="avatar-button">
@@ -58,7 +67,8 @@
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="postal_code" value="{{ old('postal_code') }}" />
+                        <input type="text" name="postal_code"
+                            value="{{ old('postal_code', $profile->postal_code ?? '') }}" />
                     </div>
                     <div class="form__error">
                         @error('postal_code')
@@ -73,7 +83,7 @@
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="address" value="{{ old('address') }}" />
+                        <input type="text" name="address" value="{{ old('address', $profile->address ?? '') }}" />
                     </div>
                     <div class="form__error">
                         @error('address')
@@ -88,7 +98,7 @@
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <input type="text" name="building" value="{{ old('building') }}" />
+                        <input type="text" name="building" value="{{ old('building', $profile->building ?? '') }}" />
                     </div>
                 </div>
             </div>

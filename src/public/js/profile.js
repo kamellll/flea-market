@@ -3,7 +3,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const previewImage = document.getElementById('avatar-preview-image');
     const placeholder = document.querySelector('#avatar-preview .avatar-placeholder');
 
-    if (!fileInput) return;
+    if (!fileInput || !previewImage || !placeholder) return;
+
+    // ★ 初期表示時：すでに src が入っていたら画像を表示、プレースホルダーを隠す
+    const initialSrc = previewImage.getAttribute('src');
+    if (initialSrc) {
+        previewImage.style.display = 'block';
+        placeholder.style.display = 'none';
+    }
 
     fileInput.addEventListener('change', function (e) {
         const file = e.target.files[0];

@@ -14,64 +14,63 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('/mypage/profile', compact('user'));
+        $profile = Profile::query()->where('user_id', $user->id)->first();
+        return view('/mypage/profile', compact('user', 'profile'));
     }
     public function store(ProfileRequest $request)
     {
         $user = $request->user();
-        $to = "";
-        if ($user->is_profile_completed == 0) {
-            $to = "/";
-        } else {
-            $to = "/mypage/profile";
-        }
-        // ① usersテーブルの name を更新（これも only() でOK）
-        $user->update(array_merge(
-            $request->only('name'),
-            ['is_profile_completed' => 1]
-        ));
-        // User::find($request->user()->id)->update($user);
 
-        $profileData = $request->only(['postal_code', 'address', 'building', '']);
+        // リダイレクト先
+        $to = $user->is_profile_completed == 0 ? '/' : '/mypage/profile';
 
-        // ③ 画像アップロードがあればパスを profileData に追加
+        // users.name / is_profile_completed を更新
+        $user->update([
+            'name' => $request->input('name'),
+            'is_profile_completed' => 1,
+        ]);
+
+        // プロフィール用データを取得
+        $profileData = $request->only([
+            'postal_code',
+            'address',
+            'building',
+        ]);
+
+        // 画像アップロード
         if ($request->hasFile('avatar')) {
 
-            // 既存画像があれば削除（任意）
-            if ($user->profile && $user->profile->avatar_path) {
-                Storage::disk('public')->delete($user->profile->avatar_path);
+            if ($user->profile && $user->profile->avatar) {
+                Storage::disk('public')->delete($user->profile->avatar);
             }
 
             $path = $request->file('avatar')->store('avatars', 'public');
-
-            // only() で作った配列に後からキーを足す
             $profileData['avatar'] = $path;
         }
 
-        // ④ updateOrCreate で「新規 or 更新」
+        // 新規 or 更新
         $user->profile()->updateOrCreate(
-            ['user_id' => $user->id], // 検索条件
-            $profileData              // 更新／作成するカラム
+            ['user_id' => $user->id],             // hasOne 経由なので user_id は自動でセットされる
+            $profileData
         );
 
-        return redirect($to);
+        return redirect($to)->with('success', 'プロフィールを保存しました。');
     }
     public function mypage(Request $request)
     {
-        $tab = $request->query('page', 'all');
+        $page = $request->query('page', 'sell');
         $user = Auth::user();
         $userId = Auth::id();
-        $profile = Profile::query()->where('user_id', $userId)->get();
+        $profile = Profile::query()->where('user_id', $userId)->first();
         $query = Product::query();
-        if ($tab === 'buy') {
-            $query->where('user_id', $userId);
-        } else {
+        if ($page === 'sell') {
             // 通常タブ
-            $query = Product::query();
+            $products = Product::query()->UserIdSearch($userId)->get();
+        } else {
+            $products = Product::whereHas('purchase', function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            })->get();
         }
-
-        $products = $query->get();
-
         return view('mypage', compact('user', 'profile', 'products'));
     }
 }

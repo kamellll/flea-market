@@ -33,4 +33,16 @@ class Product extends Model
     {
         return $this->hasMany(Good::class);
     }
+    public function scopePurchasesSearch($query, $user_id)
+    {
+        if (!empty($user_id)) {
+            $query->where('user_id', $user_id);
+        }
+    }
+    public function scopeUserIdSearch($query, $user_id)
+    {
+        if (!empty($user_id)) {
+            $query->where('user_id', $user_id);
+        }
+    }
 }

@@ -39,7 +39,7 @@
                         <button>ログイン</button>
                     </form>
                 @endif
-                <a href="/mypage" class="header__mypage">マイページ</a>
+                <a href="/mypage?page=sell" class="header__mypage">マイページ</a>
                 <a href="/sell" class="header__sell">出品</a>
             </div>
         </div>
