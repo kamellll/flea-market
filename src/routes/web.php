@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SellController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -34,4 +35,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/sell', [SellController::class, 'index']);
     Route::post('/exhibiting', [SellController::class, 'store']);
     Route::get('/mypage', [ProfileController::class, 'mypage']);
+    Route::get('/purchase/{item_id}', [PurchaseController::class, 'index']);
+    Route::post('/product/checkout', [PurchaseController::class, 'checkout']);
+
+    // 決済成功時に戻ってくるURL
+    Route::get('/payments/success', [PurchaseController::class, 'success'])
+        ->name('payments.success');
+
+    // キャンセル時
+    Route::get('/payments/cancel', [PurchaseController::class, 'cancel'])
+        ->name('payments.cancel');
 });
