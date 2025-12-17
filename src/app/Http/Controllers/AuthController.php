@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 class AuthController extends Controller
 {
 
@@ -29,11 +30,15 @@ class AuthController extends Controller
 
         // ★ ここで users テーブルの is_profile_completed をチェック
         $user = $request->user(); // Auth::user() でもOK
-
+        if ($user->email_verified_at == NULL) {
+            // まだメール未認証　→　認証メール送信
+            return redirect('/verify');
+        }
         if ((int) $user->is_profile_completed === 0) {
             // まだプロフィール未完了 → プロフィール編集画面へ
             return redirect('/mypage/profile');
         }
+
 
         return redirect('/');
     }
@@ -48,9 +53,16 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
+        event(new Registered($user));
         Auth::login($user);
         $request->session()->regenerate();
-        return redirect('/mypage/profile');
+        return redirect('/verify');
+    }
+    public function email(Request $request)
+    {
+        $user = Auth::user();
+        event(new Registered($user));
+        return view('verify-email');
     }
     public function logout(Request $request)
     {

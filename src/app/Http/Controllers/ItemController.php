@@ -142,9 +142,6 @@ class ItemController extends Controller
     }
     public function comment(CommentRequest $request)
     {
-        if (!Auth::check()) {
-            return back();
-        }
         $user = $request->user();
 
         // 同じユーザーが同じ商品を二重に「いいね」しないように firstOrCreate

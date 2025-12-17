@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use App\Models\Purchase;
 use Stripe\Checkout\Session as CheckoutSession;
+use App\Http\Requests\ProfileRequest;
 class PurchaseController extends Controller
 {
     public function index($product_id)
@@ -21,20 +22,25 @@ class PurchaseController extends Controller
     public function checkout(Request $request)
     {
         $user = $request->user();
-
         // すでに購入済みならチェック（必要なければ削除）
-        $already = Purchase::where('user_id', $user->id)
-            ->where('product_id', $request->product_id)
+        $already = Purchase::where('product_id', $request->product_id)
             ->exists();
 
         if ($already) {
-            return redirect()
-                ->route('/purchase/' . $request->product_id, $request->product_id)
-                ->with('error', 'この商品はすでに購入済みです。');
+            return redirect('/purchase/' . $request->product_id);
         }
 
         Stripe::setApiKey(config('services.stripe.secret'));
-
+        // 支払方法 (1: コンビニ, 2: カード)
+        $pay = $request->input('pay_mothod');
+        // 支払方法の切り替え
+        if ($pay === '1') {
+            // コンビニ払いのみ許可
+            $paymentMethodTypes = ['konbini'];
+        } else {
+            // カードのみ許可
+            $paymentMethodTypes = ['card'];
+        }
         // Stripe Checkout 用セッション作成
         $session = CheckoutSession::create([
             'mode' => 'payment',
@@ -56,9 +62,18 @@ class PurchaseController extends Controller
             'metadata' => [
                 'product_id' => $request->product_id,
                 'user_id' => $user->id,
+                'pay' => $pay,
             ],
         ]);
-
+        // コンビニ払いの追加オプション（任意）
+        if ($pay === '1') {
+            $params['payment_method_options'] = [
+                'konbini' => [
+                    // 例: 支払期限を7日にする（指定しない場合は3日）
+                    'expires_after_days' => 7,
+                ],
+            ];
+        }
         // Stripe が用意した決済画面へ
         return redirect($session->url);
     }
@@ -112,5 +127,35 @@ class PurchaseController extends Controller
     {
         return redirect('/')
             ->with('error', '決済がキャンセルされました。');
+    }
+
+    public function address($product_id)
+    {
+        $user = Auth::user();
+        $profile = Profile::query()->where('user_id', $user->id)->first();
+        return view('address', compact('profile', 'product_id'));
+    }
+
+    public function update(Request $request)
+    {
+        $user = $request->user();
+
+        // プロフィール用データを取得
+        $profileData = $request->only([
+            'postal_code',
+            'address',
+            'building',
+        ]);
+
+        // 新規 or 更新
+        $user->profile()->updateOrCreate(
+            ['user_id' => $user->id],             // hasOne 経由なので user_id は自動でセットされる
+            $profileData
+        );
+
+        $productId = $request->input('product_id');
+
+        return redirect('/purchase/' . $productId)
+            ->with('success', '住所を更新しました。');
     }
 }

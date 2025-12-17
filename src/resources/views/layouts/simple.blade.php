@@ -19,7 +19,7 @@
 <body>
     <header class="header">
         <div class="header__inner">
-            <img src="images/rogo.png" alt="coachtech">
+            <a href="/"><img src="/images/rogo.png" alt="coachtech"></a>
         </div>
     </header>
     <main>

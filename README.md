@@ -16,6 +16,9 @@
 6. php artisan db:seed
 7. php artisan storage:link
 8. composer require stripe/stripe-php
+9. docker-compose exec mysql bash
+10. mysql -u root -p
+11. CREATE DATABASE demo_test;
 
 ## 使用技術
 ・PHP8.1

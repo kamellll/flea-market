@@ -38,4 +38,13 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function render($request, Throwable $e)
+    {
+        // メール未認証で verified ミドルウェアに弾かれた時
+        if ($e instanceof AuthorizationException && $request->user() && !$request->user()->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
+        return parent::render($request, $e);
+    }
 }

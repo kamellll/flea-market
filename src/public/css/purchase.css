@@ -93,6 +93,12 @@ h2 {
     text-align: center;
 }
 
+.pay-box__price {
+    width: 50%;
+    text-align: center;
+    font-size: 1.3em;
+}
+
 .pay-box__content {
     width: 50%;
     text-align: center;
