@@ -39,8 +39,8 @@ class ItemController extends Controller
 
         if ($tab === 'mylist') {
             if (!Auth::check()) {
-                // 未ログイン時は普通の一覧（お好みで変更）
-                $query = Product::query();
+                // 未ログイン時の mylist は何も表示しない（0件）
+                $query = Product::query()->whereRaw('1 = 0');
             } else {
                 // マイリスト：ログインユーザーが goods に登録した商品だけ
                 $userId = Auth::id();
@@ -53,7 +53,13 @@ class ItemController extends Controller
             // 通常タブ
             $query = Product::query();
         }
-
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $query->where(function ($q) use ($userId) {
+                $q->where('user_id', '!=', $userId)
+                    ->orWhereNull('user_id');
+            });
+        }
         // ---------- ③ keyword があれば商品名であいまい検索 ----------
 
         if (!empty($keyword)) {

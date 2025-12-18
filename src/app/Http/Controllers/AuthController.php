@@ -21,7 +21,7 @@ class AuthController extends Controller
 
             // ここで「未登録 or 不一致」のエラーメッセージを付けて元の画面に戻す
             return back()->withErrors([
-                'email' => 'メールアドレスまたはパスワードが正しくありません。',
+                'email' => 'ログイン情報が登録されていません',
             ])->onlyInput('email'); // email だけ old() で保持
         }
 
