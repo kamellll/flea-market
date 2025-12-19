@@ -39,6 +39,6 @@ class SellController extends Controller
         $product->categories()->sync($categoryIds);
 
         // ④ 完了後のリダイレクト
-        return redirect('/')->with('success', '商品を出品しました。');
+        return redirect('/mypage?page=sell')->with('success', '商品を出品しました。');
     }
 }

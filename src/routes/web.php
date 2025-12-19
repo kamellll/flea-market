@@ -26,8 +26,8 @@ Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::get('/', [ItemController::class, 'index']);
 Route::post('/', [ItemController::class, 'index']);
 Route::get('/item/{item_id}', [ItemController::class, 'detail']);
-Route::post('/good', [ItemController::class, 'store']);
 Route::middleware('auth')->group(function () {
+    Route::post('/good', [ItemController::class, 'store']);
     Route::post('/comment', [ItemController::class, 'comment']);
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/mypage/profile/update', [ProfileController::class, 'store']);

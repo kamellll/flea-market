@@ -2,11 +2,12 @@ erDiagram
     products }o--|| users: ""
     goods }o--|| products: ""
     comments }o--|| products: ""
+    comments }o--|| users: ""
     category_product }o--|| products: ""
     category_product }o--|| categories: ""
     users ||--|| profiles: ""
-    purchases ||--|| products: ""
-    purchases }o--|| products: ""
+    purchases ||--o| products: ""
+    users    ||--o{ purchases : ""
     goods }o--|| users: ""
     products {
         bigint   id PK
@@ -15,7 +16,7 @@ erDiagram
         varchar(255)  product_name
         varchar(255)  brand_name
         int   price
-        string  explanation
+        text  explanation
         int    condition
         timestamp created_at
         timestamp updated_at
@@ -25,8 +26,10 @@ erDiagram
         bigint       id PK
         varchar(255) name
         varchar(255) email
+        timestamp    email_verified_at
         varchar(255) password
         tinyint is_profile_completed
+        varchar(100) remember_token
         timestamp    created_at
         timestamp    updated_at
     }
@@ -42,7 +45,8 @@ erDiagram
     comments {
         bigint   id PK
         bigint   product_id  FK
-        varchar(255)    comments
+        bigint   user_id  FK
+        varchar(255)    comment
         timestamp    created_at
         timestamp    updated_at
     }
@@ -65,10 +69,10 @@ erDiagram
     profiles {
         bigint  id  PK
         bigint  user_id FK
-        varchar(255)    avatar
         varchar(255)    postal_code
         varchar(255)    address
         varchar(255)    building
+        varchar(255)    avatar
         timestamp    created_at
         timestamp    updated_at
     }

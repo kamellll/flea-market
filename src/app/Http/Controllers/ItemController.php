@@ -118,11 +118,6 @@ class ItemController extends Controller
     }
     public function store(Request $request)
     {
-        if (!Auth::check()) {
-            return back();
-        }
-        $user = $request->user();
-
         // 同じユーザーが同じ商品を二重に「いいね」しないように firstOrCreate
         $user = $request->user();
         $productId = $request->input('product_id');

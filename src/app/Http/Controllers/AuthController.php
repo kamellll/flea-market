@@ -32,7 +32,7 @@ class AuthController extends Controller
         $user = $request->user(); // Auth::user() でもOK
         if ($user->email_verified_at == NULL) {
             // まだメール未認証　→　認証メール送信
-            return redirect('/verify');
+            return redirect('/email/verify');
         }
         if ((int) $user->is_profile_completed === 0) {
             // まだプロフィール未完了 → プロフィール編集画面へ
@@ -56,7 +56,7 @@ class AuthController extends Controller
         event(new Registered($user));
         Auth::login($user);
         $request->session()->regenerate();
-        return redirect('/verify');
+        return redirect()->route('verification.notice');
     }
     public function email(Request $request)
     {
